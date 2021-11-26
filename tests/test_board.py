@@ -125,8 +125,8 @@ class TestBoard(unittest.TestCase):
 
         self.assertEqual(expected_number_moves,board._number_moves)
 
-    def test_display(self):
-        self._test_board.display()
+#    def test_display(self):
+#        self._test_board.display()
 
     def test_search_all_valid_moves(self):
         expectation = [

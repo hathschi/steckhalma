@@ -38,6 +38,39 @@ class Game():
 
         return start,target,True
 
+    def almost_empty_test_board(self):
+        self._board._board = np.zeros((7,7))
+
+        self._board._board[3,5] = 1
+        self._board._board[4,4] = 1
+        self._board._board[5,4] = 1
+
+        self._board._last_moved = None
+        self._board._number_moves = 0
+
+    def end_game(self):
+        if self._board.is_won():
+            self.display()
+            print('')
+            print('************************')
+            print('Congratulation! You won!')
+            print('Number of moves:',self._board._number_moves)
+            print('************************')
+
+            return True
+
+        if not self._board.has_valid_moves():
+            self.display()
+            print('')
+            print('************************')
+            print('No more valid moves left')
+            print('Tokens left:',int(np.sum(self._board._board)))
+            print('************************')
+
+            return True
+
+        return False
+
 
 
 

@@ -3,11 +3,12 @@ import game
 
 game = game.Game()
 
-#game._board.move([1,3],[3,3])
+game.almost_empty_test_board()
 
-while True:
+while not game.end_game():
     game.display()
     game.ask_for_and_execute_move()
+
 
 
 

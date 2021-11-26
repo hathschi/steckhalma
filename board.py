@@ -113,6 +113,7 @@ class Board():
         print('    A B C D E F G  ')
         print('')
         print('number of moves:',self._number_moves)
+        print('-------------------')
         print('')
 
     def search_all_valid_moves(self):
@@ -142,3 +143,9 @@ class Board():
                     valid_moves += [[start,target]]
         
         return valid_moves
+
+    def has_valid_moves(self):
+        return [] != self.search_all_valid_moves()
+
+    def is_won(self):
+        return 1 == np.sum(self._board)
