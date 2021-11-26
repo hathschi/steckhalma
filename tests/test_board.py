@@ -137,6 +137,17 @@ class TestBoard(unittest.TestCase):
     def test_display(self):
         self._test_board.display()
 
+    def test_search_all_valid_moves(self):
+        expectation = [
+            [
+                [1,1],
+                [2,2],
+            ]
+        ]
+
+        actual = self._test_board.search_all_valid_moves()
+
+        assert np.all(expectation == actual)
 
 
-        
+

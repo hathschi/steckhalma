@@ -1,5 +1,5 @@
 import numpy as np
-import re, string
+import re
 import board
 import re
 
@@ -38,14 +38,6 @@ class Game():
 
         return start,target,True
 
-    # def search_all_valid_moves(self):
-    #     moves = 
-    #     #moves up
-    #     for i in range(0,7):
-    #         for j in range(0,5):
-    #             start = [i,j]
-    #             target = [i,j+2]
-    #             if self._board.is_valid_move(start,target):
 
 
 

@@ -114,3 +114,31 @@ class Board():
         print('')
         print('number of moves:',self._number_moves)
         print('')
+
+    def search_all_valid_moves(self):
+        valid_moves = []
+        for i in range(0,7):
+            for j in range(0,7):
+                start = [i,j]
+
+                #moves up
+                target = [i,j+2]
+                if self.is_valid_move(start,target):
+                    valid_moves += [start,target]
+                    
+                #moves down
+                target = [i,j-2]
+                if self.is_valid_move(start,target):
+                    valid_moves += [start,target]
+                    
+                #moves left
+                target = [i-2,j]
+                if self.is_valid_move(start,target):
+                    valid_moves += [start,target]
+                    
+                #moves right
+                target = [i+2,j]
+                if self.is_valid_move(start,target):
+                    valid_moves += [start,target]
+        
+        return valid_moves
