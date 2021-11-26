@@ -83,4 +83,34 @@ class Board():
             return self.is_on_board(coordinates)
         
         raise ValueError('are_on_board was called with the wrong number of dimensions: '+ str(dimensions))
+        
+    def display(self):
 
+        RED = '\033[91m'
+        ENDC = '\033[0m'
+
+        to_char = lambda x : ' ' if -1 == x else '\xb7' if 0 == x else '0' if 1 == x else RED+'0'+ENDC
+
+        print('')
+        print('  +---------------+')
+
+        for j in range(6,-1,-1):
+            row = str(j+1) + ' | '
+            for i in range(0,7):
+                coordinate = np.asarray([i,j])
+                x = self._board[coordinate[0],coordinate[1]]
+                if np.all(self._last_moved == coordinate):
+                    x += 1
+                if not self.is_on_board([i,j]):
+                    x = -1
+                char = to_char(x)
+                
+                row += char + ' '
+            row += '|'
+            print(row)
+        
+        print('  +---------------+')
+        print('    A B C D E F G  ')
+        print('')
+        print('number of moves:',self._number_moves)
+        print('')

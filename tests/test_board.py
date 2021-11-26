@@ -134,7 +134,8 @@ class TestBoard(unittest.TestCase):
 
         assert np.all(expected_output == self._test_board.are_on_board(three_dimensional_input))
 
-
+    def test_display(self):
+        self._test_board.display()
 
 
 
