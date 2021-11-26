@@ -44,6 +44,26 @@ class TestBoard(unittest.TestCase):
         ])
 
         assert np.all(expectation == self._test_board.are_on_board(coordinates))
+
+        three_dimensional_input = [
+            [
+                [0,0],
+                [3,3],
+                [6,0]
+            ],
+            [
+                [1,1],
+                [2,2],
+                [6,3]
+            ],
+        ]
+
+        expectation = [
+            [False,True,False],
+            [False,True,True],
+        ]
+
+        assert np.all(expectation == self._test_board.are_on_board(three_dimensional_input))
     
     def test_is_valid_move(self):
         moves = [
@@ -104,36 +124,6 @@ class TestBoard(unittest.TestCase):
         # same token moved => expected number of moves stays the same
 
         self.assertEqual(expected_number_moves,board._number_moves)
-
-    def test_are_on_board(self):
-        two_dimensional_input = [
-            [0,0],
-            [3,3]
-        ]
-        
-        expected_output = np.asarray([False,True])
-
-        assert np.all(expected_output == self._test_board.are_on_board(two_dimensional_input))
-
-        three_dimensional_input = [
-            [
-                [0,0],
-                [3,3],
-                [6,0]
-            ],
-            [
-                [1,1],
-                [2,2],
-                [6,3]
-            ],
-        ]
-        
-        expected_output = [
-            [False,True,False],
-            [False,True,True],
-        ]
-
-        assert np.all(expected_output == self._test_board.are_on_board(three_dimensional_input))
 
     def test_display(self):
         self._test_board.display()
