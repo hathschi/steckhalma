@@ -70,7 +70,17 @@ class Board():
         return False
 
     def are_on_board(self,coordinates):
-        #TODO improve. this is not pythonic
-        return np.array([self.is_on_board(coordinate) for coordinate in coordinates])
+        dimensions = len(np.shape(coordinates))
 
+        if 2 < dimensions:
+            #TODO improve. this is not pythonic
+            return np.array([self.are_on_board(coordinate) for coordinate in coordinates])
+        
+        if 2 == dimensions:
+            return np.array([self.is_on_board(coordinate) for coordinate in coordinates])
+        
+        if 1 == dimensions:
+            return self.is_on_board(coordinates)
+        
+        raise ValueError('are_on_board was called with the wrong number of dimensions: '+ str(dimensions))
 

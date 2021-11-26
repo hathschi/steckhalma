@@ -105,6 +105,37 @@ class TestBoard(unittest.TestCase):
 
         self.assertEquals(expected_number_moves,board._number_moves)
 
+    def test_are_on_board(self):
+        two_dimensional_input = [
+            [0,0],
+            [3,3]
+        ]
+        
+        expected_output = np.asarray([False,True])
+
+        assert np.all(expected_output == self._test_board.are_on_board(two_dimensional_input))
+
+        three_dimensional_input = [
+            [
+                [0,0],
+                [3,3]
+            ],
+            [
+                [1,1],
+                [2,2],
+                [6,3]
+            ],
+        ]
+        
+        expected_output = np.asarray([
+            [False,True],
+            [False,True,True],
+        ])
+
+        assert np.all(expected_output == self._test_board.are_on_board(three_dimensional_input))
+
+
+
 
 
         
