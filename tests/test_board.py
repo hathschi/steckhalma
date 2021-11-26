@@ -83,27 +83,27 @@ class TestBoard(unittest.TestCase):
         board = Board()
         expected_number_moves = 0
 
-        self.assertEquals(expected_number_moves,board._number_moves)
+        self.assertEqual(expected_number_moves,board._number_moves)
 
         board.move([1,3], [3,3])
         expected_number_moves += 1
 
-        self.assertEquals(expected_number_moves,board._number_moves)
+        self.assertEqual(expected_number_moves,board._number_moves)
 
         board.move([4,3], [2,3])
         expected_number_moves += 1
 
-        self.assertEquals(expected_number_moves,board._number_moves)
+        self.assertEqual(expected_number_moves,board._number_moves)
 
         board.move([3,1], [3,3])
         expected_number_moves += 1
 
-        self.assertEquals(expected_number_moves,board._number_moves)
+        self.assertEqual(expected_number_moves,board._number_moves)
 
         board.move([3,3], [1,3])
         # same token moved => expected number of moves stays the same
 
-        self.assertEquals(expected_number_moves,board._number_moves)
+        self.assertEqual(expected_number_moves,board._number_moves)
 
     def test_are_on_board(self):
         two_dimensional_input = [
@@ -118,7 +118,8 @@ class TestBoard(unittest.TestCase):
         three_dimensional_input = [
             [
                 [0,0],
-                [3,3]
+                [3,3],
+                [6,0]
             ],
             [
                 [1,1],
@@ -127,10 +128,10 @@ class TestBoard(unittest.TestCase):
             ],
         ]
         
-        expected_output = np.asarray([
-            [False,True],
+        expected_output = [
+            [False,True,False],
             [False,True,True],
-        ])
+        ]
 
         assert np.all(expected_output == self._test_board.are_on_board(three_dimensional_input))
 
@@ -139,10 +140,11 @@ class TestBoard(unittest.TestCase):
 
     def test_search_all_valid_moves(self):
         expectation = [
-            [
-                [1,1],
-                [2,2],
-            ]
+            [[0, 3], [2, 3]],
+            [[2, 1], [2, 3]],
+            [[2, 5], [2, 3]],
+            [[3, 1], [3, 3]],
+            [[5, 3], [3, 3]]
         ]
 
         actual = self._test_board.search_all_valid_moves()
