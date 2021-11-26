@@ -1,15 +1,17 @@
+import copy
+
 import numpy as np
 
 
 class Board():
-    _distance_right = np.asarray([2,0])
-    _distance_left = np.asarray([-2,0])
-    _distance_up = np.asarray([0,2])
-    _distance_down = np.asarray([0,-2])
+    _distance_right = np.asarray([2,0]).astype(int)
+    _distance_left = np.asarray([-2,0]).astype(int)
+    _distance_up = np.asarray([0,2]).astype(int)
+    _distance_down = np.asarray([0,-2]).astype(int)
 
     def __init__(self) -> None:
-        self._board = np.zeros((7,7))
-        #TODO improve. this is not pythonic
+        self._board = np.zeros((7,7)).astype(int)
+
         for i in range(7):
             for j in range(7):
                 self._board[i,j] = int(self.is_on_board([i,j]))
@@ -20,8 +22,8 @@ class Board():
         self._number_moves = 0
 
     def is_valid_move(self,start,target):
-        start = np.asarray(start)
-        target = np.asarray(target)
+        start = np.asarray(start).astype(int)
+        target = np.asarray(target).astype(int)
         distance = target - start
         
         valid_distance = (
@@ -34,15 +36,15 @@ class Board():
             return False
         
         mid = ((start + target) / 2).astype(int)
-        valid_start = self.is_on_board(start) and 1 == self._board[start[0],start[1]]
-        valid_mid   = self.is_on_board(mid) and 1 == self._board[mid[0],mid[1]]
+        valid_start  = self.is_on_board(start) and 1 == self._board[start[0],start[1]]
+        valid_mid    = self.is_on_board(mid) and 1 == self._board[mid[0],mid[1]]
         valid_target = self.is_on_board(target) and 0 == self._board[target[0],target[1]]
 
         return valid_start and valid_mid and valid_target
 
     def move(self,start,target):
-        start = np.asarray(start)
-        target = np.asarray(target)
+        start = np.asarray(start).astype(int)
+        target = np.asarray(target).astype(int)
 
         assert self.is_valid_move(start,target)
 
@@ -74,10 +76,10 @@ class Board():
 
         if 2 < dimensions:
             #TODO improve. this is not pythonic
-            return np.array([self.are_on_board(coordinate) for coordinate in coordinates])
+            return np.asarray([self.are_on_board(coordinate) for coordinate in coordinates])
         
         if 2 == dimensions:
-            return np.array([self.is_on_board(coordinate) for coordinate in coordinates])
+            return np.asarray([self.is_on_board(coordinate) for coordinate in coordinates])
         
         if 1 == dimensions:
             return self.is_on_board(coordinates)
@@ -97,7 +99,7 @@ class Board():
         for j in range(6,-1,-1):
             row = str(j+1) + ' | '
             for i in range(0,7):
-                coordinate = np.asarray([i,j])
+                coordinate = np.asarray([i,j]).astype(int)
                 x = self._board[coordinate[0],coordinate[1]]
                 if np.all(self._last_moved == coordinate):
                     x += 1
@@ -120,6 +122,9 @@ class Board():
         valid_moves = []
         for i in range(0,7):
             for j in range(0,7):
+                if 0 == self._board[i,j]:
+                    continue
+
                 start = [i,j]
 
                 #moves up
@@ -152,3 +157,90 @@ class Board():
 
     def count_tokens(self):
         return np.sum(self._board).astype(int)
+
+    def move_backwards(self,start,target):
+        start = np.asarray(start).astype(int)
+        target = np.asarray(target).astype(int)
+
+        assert self.is_valid_backwards_move(start,target)
+
+        if np.any(start != self._last_moved):
+            self._number_moves += 1
+
+        mid = ((start + target) / 2).astype(int)
+        self._board[start[0], start[1]] = 0
+        self._board[mid[0], mid[1]] = 1
+        self._board[target[0], target[1]] = 1
+
+        self._last_moved = target
+
+    def is_valid_backwards_move(self, start, target):
+        start = np.asarray(start).astype(int)
+        target = np.asarray(target).astype(int)
+        distance = target - start
+
+        valid_distance = (
+                np.all(self._distance_right == distance)
+                or np.all(self._distance_left == distance)
+                or np.all(self._distance_up == distance)
+                or np.all(self._distance_down == distance)
+        )
+        if not valid_distance:
+            return False
+
+        mid = ((start + target) / 2).astype(int)
+        valid_start = self.is_on_board(start) and 1 == self._board[start[0], start[1]]
+        valid_mid = self.is_on_board(mid) and 0 == self._board[mid[0], mid[1]]
+        valid_target = self.is_on_board(target) and 0 == self._board[target[0], target[1]]
+
+        return valid_start and valid_mid and valid_target
+
+    def search_all_valid_backward_moves(self):
+        valid_moves = []
+        for i in range(0, 7):
+            for j in range(0, 7):
+                if 0 == self._board[i,j]:
+                    continue
+
+                start = [i, j]
+
+                # moves up
+                target = [i, j + 2]
+                if self.is_valid_backwards_move(start, target):
+                    valid_moves += [[start, target]]
+
+                # moves down
+                target = [i, j - 2]
+                if self.is_valid_backwards_move(start, target):
+                    valid_moves += [[start, target]]
+
+                # moves left
+                target = [i - 2, j]
+                if self.is_valid_backwards_move(start, target):
+                    valid_moves += [[start, target]]
+
+                # moves right
+                target = [i + 2, j]
+                if self.is_valid_backwards_move(start, target):
+                    valid_moves += [[start, target]]
+
+        return valid_moves
+
+    def almost_empty(self):
+        i = -1
+        j = -1
+        while not self.is_on_board([i,j]):
+            i = np.random.randint(7)
+            j = np.random.randint(7)
+
+        self._board = np.zeros((7,7)).astype(int)
+
+        self._board[i,j] = 1
+        self._last_moved = [i,j]
+        self._number_moves = 0
+
+    def without_metadata(self):
+        copied_board = copy.deepcopy(self)
+        copied_board._number_moves = 0
+        copied_board._last_moved = None
+        return copied_board
