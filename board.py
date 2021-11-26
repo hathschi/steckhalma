@@ -20,20 +20,22 @@ class Board():
         start = np.asarray(start)
         target = np.asarray(target)
         distance = target - start
-        valid_distance = np.all(self._distance_right == distance) or np.all(self._distance_left == distance) or np.all(self._distance_up == distance) or np.all(self._distance_down == distance)
+        
+        valid_distance = (
+            np.all(self._distance_right == distance)
+            or np.all(self._distance_left == distance)
+            or np.all(self._distance_up == distance)
+            or np.all(self._distance_down == distance)
+        )
         if not valid_distance:
             return False
         
         mid = ((start + target) / 2).astype(int)
-        board_start = self._board[start[0],start[1]]
-        occupied_start = 1 == board_start
-        valid_start = self.is_on_board(start) and occupied_start
+        valid_start = self.is_on_board(start) and 1 == self._board[start[0],start[1]]
         valid_mid   = self.is_on_board(mid) and 1 == self._board[mid[0],mid[1]]
         valid_target = self.is_on_board(target) and 0 == self._board[target[0],target[1]]
 
         return valid_start and valid_mid and valid_target
-
-
 
     def is_on_board(self,coordinate):
         if 0 > coordinate[0] or coordinate[0] >= 7:

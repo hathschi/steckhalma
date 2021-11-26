@@ -43,9 +43,7 @@ class TestBoard(unittest.TestCase):
             False
         ])
 
-        actual = self._board.are_on_board(coordinates)
-
-        assert np.all(expectation == actual)
+        assert np.all(expectation == self._board.are_on_board(coordinates))
     
     def test_is_valid_move(self):
         moves = [
