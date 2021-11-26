@@ -4,11 +4,11 @@ import unittest
 from board import Board
 
 class TestBoard(unittest.TestCase):
-    _board = Board()
-    _board._board[2,3] = 0
-    _board._board[3,5] = 0
+    _test_board = Board()
+    _test_board._board[2,3] = 0
+    _test_board._board[3,5] = 0
     
-    def test_are_coordinates(self):
+    def test_are_on_board(self):
         coordinates = np.array([
             [-1,-1],
             [0,0],
@@ -43,7 +43,7 @@ class TestBoard(unittest.TestCase):
             False
         ])
 
-        assert np.all(expectation == self._board.are_on_board(coordinates))
+        assert np.all(expectation == self._test_board.are_on_board(coordinates))
     
     def test_is_valid_move(self):
         moves = [
@@ -73,4 +73,38 @@ class TestBoard(unittest.TestCase):
         ]
 
         for i,move in enumerate(moves):
-            assert expectations[i] == self._board.is_valid_move(move[0],move[1])
+            assert expectations[i] == self._test_board.is_valid_move(move[0],move[1])
+    
+    def test_invalid_move_raises_exception(self):
+        with self.assertRaises(AssertionError):
+            self._test_board.move([2,3], [4,3])
+    
+    def test_move(self):
+        board = Board()
+        expected_number_moves = 0
+
+        self.assertEquals(expected_number_moves,board._number_moves)
+
+        board.move([1,3], [3,3])
+        expected_number_moves += 1
+
+        self.assertEquals(expected_number_moves,board._number_moves)
+
+        board.move([4,3], [2,3])
+        expected_number_moves += 1
+
+        self.assertEquals(expected_number_moves,board._number_moves)
+
+        board.move([3,1], [3,3])
+        expected_number_moves += 1
+
+        self.assertEquals(expected_number_moves,board._number_moves)
+
+        board.move([3,3], [1,3])
+        # same token moved => expected number of moves stays the same
+
+        self.assertEquals(expected_number_moves,board._number_moves)
+
+
+
+        

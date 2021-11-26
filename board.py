@@ -16,6 +16,9 @@ class Board():
         
         self._board[3,3] = 0
 
+        self._last_moved = None
+        self._number_moves = 0
+
     def is_valid_move(self,start,target):
         start = np.asarray(start)
         target = np.asarray(target)
@@ -36,6 +39,22 @@ class Board():
         valid_target = self.is_on_board(target) and 0 == self._board[target[0],target[1]]
 
         return valid_start and valid_mid and valid_target
+
+    def move(self,start,target):
+        start = np.asarray(start)
+        target = np.asarray(target)
+
+        assert self.is_valid_move(start,target)
+
+        if np.any(start != self._last_moved):
+            self._number_moves += 1
+        
+        mid = ((start + target) / 2).astype(int)
+        self._board[start[0],start[1]] = 0
+        self._board[mid[0],mid[1]] = 0
+        self._board[target[0],target[1]] = 1
+
+        self._last_moved = target
 
     def is_on_board(self,coordinate):
         if 0 > coordinate[0] or coordinate[0] >= 7:
