@@ -148,4 +148,7 @@ class Board():
         return [] != self.search_all_valid_moves()
 
     def is_won(self):
-        return 1 == np.sum(self._board)
+        return 1 == np.sum(self._board).astype(int)
+
+    def count_tokens(self):
+        return np.sum(self._board).astype(int)
